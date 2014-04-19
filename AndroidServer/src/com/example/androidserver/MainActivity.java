@@ -1,18 +1,43 @@
 package com.example.androidserver;
 
+import java.util.ArrayList;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.os.Build;
 
 public class MainActivity extends ActionBarActivity {
 
+	private static final int REQUEST_ENABLE_BT = 2;  
+    TextView txt;  
+    TextView txt_see;  
+    TextView txt_scan;  
+    BluetoothAdapter mBluetoothAdapter;  
+    ArrayAdapter mArrayAdapter;  
+    Button btn_switch;  
+    Button btn_see;  
+    Button btn_scan;  
+    ListView list;  
+    CountDownTimer see_timer;  
+    CountDownTimer scan_timer; 
+    //Set<BluetoothDevice> pairedDevices;
+	ArrayList<BluetoothDevice> bluetoothArray = new ArrayList<BluetoothDevice>();
+
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

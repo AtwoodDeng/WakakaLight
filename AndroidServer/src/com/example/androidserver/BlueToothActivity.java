@@ -1,18 +1,36 @@
 package com.example.androidserver;
 
+import java.util.UUID;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.os.Build;
 
 public class BlueToothActivity extends ActionBarActivity {
 
+	Button btn_send;
+	EditText editText;
+	TextView textView;
+	
+//	String deviceName;
+//	String deviceAddress;
+	BluetoothDevice mDevice;
+	BluetoothSocket mSocket;
+	UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

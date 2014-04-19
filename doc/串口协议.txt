@@ -1,0 +1,20 @@
+数据结构：
+
+final CockColors[4] = {};
+public class Cock{
+	byte colorID;
+	byte isPouring;
+}
+
+public class Tail{
+	byte isPoured;
+	byte isPouring;
+	byte isShaking;
+	byte isBumping;
+	Color color;
+}
+
+public class CockTail{
+	byte isShaking;
+	Color colors[3];
+}
