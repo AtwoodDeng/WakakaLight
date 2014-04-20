@@ -6,62 +6,105 @@
     tools:context="com.example.androidserver.MainActivity"
     tools:ignore="MergeRootFrame" >
 
-     <LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
         
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView1" />
-    
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView2" />
-    
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView3" />
-    
-    
-     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        
-	     <Button 
-	         android:id="@+id/button1" 
-	         android:text="OFF" 
-	         android:layout_width="wrap_content" 
-	         android:layout_height="wrap_content"
-	         android:onClick="onButton1"/>  
+        <!-- main text  -->
+	    <TextView
+	        android:id="@+id/mainText"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="" />
+	  
+	    <!-- main buttons -->
+	     <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+
+	         <Button
+	             android:id="@+id/buttonStart"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:text="Start"
+	             android:onClick="onButtonStart" />
+	        
+		     <Button 
+		         android:id="@+id/buttonControl" 
+		         android:text="OFF" 
+		         android:layout_width="wrap_content" 
+		         android:layout_height="wrap_content"
+		         android:onClick="onButtonControl"/>
+		    
+		    <Button 
+		         android:id="@+id/buttonSearch" 
+		         android:text="search"
+		         android:layout_width="wrap_content" 
+		         android:layout_height="wrap_content"
+		         android:onClick="onButtonSearch"/>
+		    
+	    </LinearLayout>
 	    
+	    <!-- cock -->
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+		    
+	        
+		    <Button 
+		         android:id="@+id/buttonCock" 
+		         android:text="cock"
+		         android:layout_width="wrap_content" 
+		         android:layout_height="wrap_content"
+		         android:onClick="onButtonCock"/>
+		    
+		     <TextView
+		         android:id="@+id/textCock"
+		         android:layout_width="match_parent"
+		         android:layout_height="wrap_content"
+		         android:text="no device found" />
+		    
+	    </LinearLayout>
 	    
-	    <Button 
-	         android:id="@+id/button3" 
-	         android:text="button3" 
-	         android:layout_width="wrap_content" 
-	         android:layout_height="wrap_content"
-	         android:onClick="onButton3"/>
-	    
-    </LinearLayout>
+	     <!-- cock tail -->
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+		    
+	        
+		    <Button 
+		         android:id="@+id/buttonCocktail" 
+		         android:text="cock"
+		         android:layout_width="wrap_content" 
+		         android:layout_height="wrap_content"
+		         android:onClick="onButtonCocktail"/>
+		    
+		     <TextView
+		         android:id="@+id/textCocktail"
+		         android:layout_width="match_parent"
+		         android:layout_height="wrap_content"
+		         android:text="no device found" />
+		    
+	    </LinearLayout>
     
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal" >
-    <ListView
-        android:id="@+id/listView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
-   	</LinearLayout>
+	    <!-- list view -->
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+		    
+		    <ListView
+		        android:id="@+id/listView"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content" >
+		    </ListView>
+		    
+	   	</LinearLayout>
+   	
     </LinearLayout>
     
     </FrameLayout>

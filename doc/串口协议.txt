@@ -2,7 +2,7 @@
 
 final CockColors[4] = {};
 public class Cock{
-	int id;
+	byte id;
 	byte colorID; //1, green; 2, blue
 	byte isPouring;
 }
@@ -10,7 +10,7 @@ input: [id][colorID][isPouring]\0
 output: [r][g][b]\0
 
 public class Tail{
-	int id;
+	byte id;
 	byte isPoured;
 	byte isPouring;
 	byte isShaking;
@@ -21,7 +21,7 @@ input: [id][isPoured][isPouring][isShaking][isBumping][r][g][b]\0
 output: [r][g][b]\0
 
 public class CockTail{
-	int id;
+	byte id;
 	byte isShaking;
 	Color colors[3];
 }
