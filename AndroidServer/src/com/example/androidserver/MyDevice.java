@@ -65,36 +65,38 @@ public class MyDevice<T>{
 		text.setText( name + " connect to " + device.getName());
 		}catch (Exception e){
 			if ( text != null )
-				text.setText(e.toString());
+				text.setText("connect fail " + e.toString());
 		}
 	}
-	public byte[] receive( int expect_len )
+	public byte[] receive( byte[] get)
 	{
 		if ( device != null && socket != null && in != null && out != null )
 		{
-			byte[] get = new byte[100];
 			try{
-				if ( in.available() >= expect_len )
+				if ( in.available() >= 1 )
 				{
+					if ( get == null )
+						get = new byte[100];
 					in.read(get);
+					text.setText(name + " receive " + get[0] + get[1] + get[2]);
 					return get;
 				}
 			}catch (Exception e){
-				text.setText(e.toString());
+				text.setText("receive fail " + e.toString());
 			}
-			return get;
+			return null;
 		}
 		return null;
 	}
 	
-	public void send( byte[] info){
-
+	public void send( byte[] info)
+	{
 		if ( device != null && socket != null && in != null && out != null )
 		{
 			try{
 				out.write(info);
 			}catch (Exception e){
-				text.setText(e.toString());
+				text.setText("send fail" + e.toString());
 			}
 		}
 	}

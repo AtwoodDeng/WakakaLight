@@ -11,6 +11,7 @@ import java.util.UUID;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.R.integer;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -36,7 +37,8 @@ import android.os.Build;
 
 public class MainActivity extends ActionBarActivity {
 
-
+	static final int delay = 100;
+	
 	UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 	//basic
 	private static final int REQUEST_ENABLE_BT = 2;  
@@ -59,9 +61,14 @@ public class MainActivity extends ActionBarActivity {
 	TextView cockText;
 	Cock cockData;
 	
+	//Cock
+	MyDevice<Cock> cockMyDevice = new MyDevice<Cock>("cock", (byte)0);
+	
+	//Tail
+	MyDevice<Tail> tailDevice = new MyDevice<Tail>("tail", (byte)3);
+	
 	//CockTail
 	MyDevice<Cocktail> cocktailDevice = new MyDevice<Cocktail>("cocktail", (byte)1);
-	
 	
 	public enum MyState
 	{
@@ -89,8 +96,10 @@ public class MainActivity extends ActionBarActivity {
     public void onButtonStart( View view)
     {
         btnSwitch.setEnabled(true);
-    	btnCock.setEnabled(true);
+    	//btnCock.setEnabled(true);
     	cocktailDevice.start();
+    	tailDevice.start();
+    	cockMyDevice.start();
     	
         if (mBluetoothAdapter.isEnabled())
         {
@@ -105,9 +114,11 @@ public class MainActivity extends ActionBarActivity {
     	//blink
         txt = (TextView)findViewById(R.id.mainText); 
         txt.setText("__Wakaka__");
-        cockText = (TextView)findViewById(R.id.textCock);
-        cockText.setText( "cock device not found");
+        //cockText = (TextView)findViewById(R.id.textCock);
+        //cockText.setText( "cock device not found");
         cocktailDevice.text = (TextView)findViewById(R.id.textCocktail);
+        tailDevice.text = (TextView)findViewById(R.id.textTail);
+        cockMyDevice.text = (TextView)findViewById(R.id.textCock);
         list = (ListView) findViewById(R.id.listView);    
         
         //blind buttons
@@ -116,14 +127,20 @@ public class MainActivity extends ActionBarActivity {
         btnScan = (Button)findViewById(R.id.buttonSearch);  
         btnScan.setText("扫描:OFF");
         btnScan.setEnabled(false);
-        btnCock = (Button)findViewById(R.id.buttonCock);
-        btnCock.setEnabled(false);
+        //btnCock = (Button)findViewById(R.id.buttonCock);
+        //btnCock.setEnabled(false);
         cocktailDevice.btn = (Button)findViewById(R.id.buttonCocktail);
+        tailDevice.btn = (Button)findViewById(R.id.buttonTail);
+        cockMyDevice.btn = (Button)findViewById(R.id.buttonCock);
         
         //init data
-        cockData = new Cock();
-        cocktailDevice.data = new Cocktail();
+        cockData = new Cock((byte)0);
+        cocktailDevice.data = new Cocktail((byte)1);
         cocktailDevice.init();
+        tailDevice.data = new Tail((byte)3);
+        tailDevice.init();
+        cockMyDevice.data = new Cock((byte)0);
+        cockMyDevice.init();
         
         //list view
         mArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1);
@@ -173,7 +190,7 @@ public class MainActivity extends ActionBarActivity {
 			}
         };
         
-        main_timer = new CountDownTimer(1200000,500)   
+        main_timer = new CountDownTimer(1200000,delay)   
         {  
             @Override  
             public void onTick( long millisUntilFinished)   
@@ -196,38 +213,46 @@ public class MainActivity extends ActionBarActivity {
     	send();
     }
     
-    static int time = 0;
     public void receive()
     {
-    	time ++;
     	try{
     		//receive cock
-	    	if ( cockDevice != null && cockSocket != null && cockIn != null && cockOut != null )
 	    	{
-	    		if ( cockIn.available() >= 4 )
+	    		byte[] cockRec = new byte[100];
+	    		cockMyDevice.receive(cockRec);
+	    		if ( cockRec == null )
 	    		{
-	    			byte[] in = new byte[100];
-	    			cockIn.read(in);
-	    			cockIn.reset();
-	    			
-	    			if ( in[0] != '0' )
-	    			{
-	    				setMessage("wrong cock id " + in[0] );
-	    				return;
-	    			}
-	    			if ( in[3] != '#')
-	    			{
-	    				setMessage("wrong protile tail " + in[3]);
-	    				return;
-	    			}
-	    			
-	    			cockData.colorID = (byte)(in[1] - 48);
-	    			cockData.isPouring = (byte)(in[2] -48);
-	    			setMessage("get " + time + " " + cockData.colorID + " " + cockData.isPouring );
-	    		}
-	    		
-	    		byte[] cocktailRec = cocktailDevice.receive(15);
+	    			setMessage("null receive in cock");
+	    		}else {
+		    		//setMessage("receive cock " + " ispoured " + cockRec[1] + " ispouring " +  cockRec[2] + " isshaking " + cockRec[3]);
+		    		cockMyDevice.data.receive(cockRec);
+	    		}	
 	    	}
+	    	
+	    	{
+	    		byte[] tailRec = new byte[100];
+	    		tailDevice.receive(tailRec);
+	    		if ( tailRec == null )
+	    		{
+	    			setMessage("null receive in tail");
+	    		}else {
+		    		
+		    		tailDevice.data.receive(tailRec);
+	    		}	
+	    	}
+	    	
+	    	{
+	    		byte[] cockTailRec = new byte[100];
+	    		cocktailDevice.receive(cockTailRec);
+	    		if ( cockTailRec == null )
+	    		{
+	    			setMessage("null receive in cocktail");
+	    		}else {
+	    			//setMessage("receive cocktail " + cockTailRec[0] + " " + cockTailRec[1] + " " +  cockTailRec[2] + " " + cockTailRec[3]);
+	    			cocktailDevice.data.receive(cockTailRec);
+	    		}	
+	    	}
+	    	
     	}catch( Exception e){
     		setMessage("Fail receive " + e.toString());
     	}
@@ -238,37 +263,75 @@ public class MainActivity extends ActionBarActivity {
     {
     	if ( cockDevice != null && cockSocket != null && cockIn != null && cockOut != null  )
     	{
-    		if ( cockData.colorID == 1 )
-    		{
-    			cockData.setColor(0, 255, 0);
-    		}
-    		else if ( cockData.colorID == 2 )
-    		{
-    			cockData.setColor(0, 0, 255);
-    		}
-    		else
-    		{
-    			cockData.setColor(0, 0, 0);
-    		}
+    		cockData.deal();
     	}
-
+    	
+    	cockMyDevice.data.deal();
+    	
+    	tailDevice.data.deal();
+    	
+    	cocktailDevice.data.deal(txt);
+    	
+    	dealCockAndTail(cockMyDevice.data , tailDevice.data);
+    	
+    	dealTailAndCocktail(tailDevice.data, cocktailDevice.data);
     }
+    
+    public int cockIsPouring = 0;
+    public void dealCockAndTail( Cock cock , Tail tail )
+    {
+    	if ( cock.isPouring == 1 && tail.isPoured == 1){
+    		
+    		if ( cockIsPouring == 0 )
+    		{
+    	
+	    		if ( cock.colorID != 0 )
+	    		{
+	    			tail.setColor(cock.r, cock.g, cock.b);
+	    		}
+	    		
+	    		cockIsPouring = 1;
+    		}
+    	}else{
+    		cockIsPouring = 0;
+    	}
+    }
+    
+    public int tailisPouring = 0;
+    public void dealTailAndCocktail( Tail tail, Cocktail cocktail )
+    {
+    	if( tail.isPouring == 1 && cocktail.isPoured == 1 )
+    	{
+    		if ( tailisPouring == 0)
+    		{
+    			cocktail.addColor(tail.r, tail.g, tail.b);
+    			tailisPouring = 1;
+    		}else {
+				
+			}
+    	}else{
+    		tailisPouring = 0;
+    	}
+    }
+    
     public void send()
     {
     	try{
-	    	if ( cockDevice != null && cockSocket != null && cockIn != null && cockOut != null  )
+    		
 	    	{
-	    		byte[] out = new byte[4];
-	    		out[0] = cockData.r;
-	    		out[1] = cockData.g;
-	    		out[2] = cockData.b;
-	    		out[3] = (byte)'#';
-	    		cockOut.write(out);
+	    		cockMyDevice.send(cockMyDevice.data.getInfo());
 	    	}
+	    	
 	    	{
-
-	    		byte[] out = new byte[13];
-	    		cocktailDevice.send(out);
+	    		tailDevice.send(tailDevice.data.getInfo());
+	    	}
+	    	
+	    	{
+	    		byte[] cocktailSend = cocktailDevice.data.getInfo();
+	    		setMessage("send cocktail " + cocktailSend[0] + cocktailSend[1] + cocktailSend[2] + " " 
+	    				+ cocktailSend[3] + cocktailSend[4] + cocktailSend[5]+ " "
+	    				+ cocktailSend[6] + cocktailSend[7] + cocktailSend[8]+ " "+ cocktailSend[9]);
+	    		cocktailDevice.send(cocktailDevice.data.getInfo());
 	    	}
     	}catch( Exception e){
     		setMessage("Fail receive " + e.toString());
@@ -279,24 +342,20 @@ public class MainActivity extends ActionBarActivity {
     {
     	switch(state){
     	case SelectCock:
-    		cockDevice = device;
-			setMessage("Begin connect to " + device.getName());
-    		try {
-    			cockSocket = cockDevice.createRfcommSocketToServiceRecord(uuid); 
-    			cockSocket.connect(); 
-    			cockIn = cockSocket.getInputStream();
-    			cockOut = cockSocket.getOutputStream();
-    			setMessage("Cock connection success!");
-        		cockText.setText("cock connect to " + device.getName());
-    			send();
-    		} catch (Exception e) {
-    			setMessage("Fail selectDevice " + e.toString());
-    		}
+    		cockMyDevice.select(device);
+    		send();
+			setMessage("Cock connection success!");
     		break;
     	case SelectCocktail:
     		cocktailDevice.select(device);
     		send();
 			setMessage("Cocktail connection success!");
+			break;
+    	case SelectTail:
+    		tailDevice.select(device);
+    		send();
+    		setMessage("Tail connection success!");
+    		break;
     	default:
     		break;
     	}
@@ -310,11 +369,24 @@ public class MainActivity extends ActionBarActivity {
 		state = MyState.SelectCocktail;
 		setMessage("select a cock tail device.");
 	}
+	public void onButtonTail( View view ){
+		state = MyState.SelectTail;
+		setMessage("select a tail device.");
+	}
     
+	static int len = 0;
     public void setMessage( String str )
     {
+    	len++;
+    	if ( len == 7 )
+    	{
+    		txt.setText("");
+    		len = 0;
+    	}
     	if ( txt != null )
-    		txt.setText(str);
+    	{
+    		txt.setText(txt.getText() + str + "\r\n");
+    	}
     }
     
     public void onButtonControl(View view){
@@ -325,7 +397,6 @@ public class MainActivity extends ActionBarActivity {
 			{
 				Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-				txt.setText("s1");
 				btnScan.setText("扫描:OFF");
 				btnScan.setEnabled(true);
 			}
@@ -344,12 +415,10 @@ public class MainActivity extends ActionBarActivity {
 		 String str = btnScan.getText().toString();  
          if (str == "扫描:OFF")  
          {  
-             txt.setText("s5");  
              if (mBluetoothAdapter.isEnabled())   
              {  
                  //开始扫描   
-                 mBluetoothAdapter.startDiscovery();  
-                 txt.setText("s6");  
+                 mBluetoothAdapter.startDiscovery();
                  btnScan.setText("扫描:ON");  
                    
                  // Create a BroadcastReceiver for ACTION_FOUND   
@@ -400,8 +469,7 @@ public class MainActivity extends ActionBarActivity {
             if (resultCode == Activity.RESULT_OK)   
             {    
                 // Bluetooth is now enabled, so set up a chat session     
-                btnSwitch.setText("ON");  
-                txt.setText("s4");  
+                btnSwitch.setText("ON");
                   
                 //获取蓝牙列表   
                 Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();  
@@ -409,9 +477,6 @@ public class MainActivity extends ActionBarActivity {
                 // If there are paired devices   
                 if (pairedDevices.size() > 0)   
                 { 
-                	
-                	txt.setText("s3");   
-                      
                     // Loop through paired devices   
                     for (BluetoothDevice device : pairedDevices)   
                     {  

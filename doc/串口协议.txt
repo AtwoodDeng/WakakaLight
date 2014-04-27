@@ -25,5 +25,5 @@ public class CockTail{
 	byte isShaking;
 	Color colors[3];
 }
-input: [id][isShaking][r][g][b][r][g][b][r][g][b][r][g][b]\0
-output: [r][g][b][r][g][b][r][g][b][r][g][b]\0
+input: [id][isPoured][isShaking]\0
+output: [r][g][b][r][g][b][r][g][b]\0
