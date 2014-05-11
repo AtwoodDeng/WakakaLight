@@ -1,17 +1,17 @@
-int redPin1 = 2;
-int greenPin1 = 3;
-int bluePin1 = 4;
+int redPin1 = 3;
+//int greenPin1 = 3;
+int bluePin1 = 5;
 
-int redPin2 = 5;
-int greenPin2 = 6;
-int bluePin2 = 7;
+int redPin2 = 6;
+int greenPin2 = 5;
+//int bluePin2 = 9;
 
-int redPin3 = 8;
-int greenPin3 = 9;
-int bluePin3 = 10;
+int redPin3 = 10;
+//int greenPin3 = 11;
+int bluePin3 = 11;
 
-int isPouredPin = 11;
-int isPouringPin = 12;
+int isPouredPin = 12;
+int isPouringPin = 13;
 
 const int init_frequency = 9600;
 
@@ -38,15 +38,15 @@ void setup()
   pinMode(isPouringPin , INPUT);
   
   pinMode(redPin1, OUTPUT);
-  pinMode(greenPin1, OUTPUT);
+  //pinMode(greenPin1, OUTPUT);
   pinMode(bluePin1, OUTPUT);
   
   pinMode(redPin2, OUTPUT);
   pinMode(greenPin2, OUTPUT);
-  pinMode(bluePin2, OUTPUT);
+  //pinMode(bluePin2, OUTPUT);
   
   pinMode(redPin3, OUTPUT);
-  pinMode(greenPin3, OUTPUT);
+  //pinMode(greenPin3, OUTPUT);
   pinMode(bluePin3, OUTPUT);
 }
 
@@ -136,7 +136,17 @@ void printData() {
 
 void setColor(int red, int green, int blue, int id)
 {
-  analogWrite(id * 3 - 1, 255-red);
-  analogWrite(id * 3, 255-green);
-  analogWrite(id * 3 + 1, 255-blue);  
+  if(id == 1) {
+    analogWrite(3, 255-red);
+    //analogWrite(3, 255-green);
+    analogWrite(5, 255-blue); 
+  } else if( id == 2) {
+    analogWrite(6, 255-red);
+    analogWrite(9, 255-green);
+    //analogWrite(9, 255-blue); 
+  } else if( id == 3) {
+    analogWrite(10, 255-red);
+    //analogWrite(11, 255-green);
+    analogWrite(11, 255-blue); 
+  } 
 }

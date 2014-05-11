@@ -4,7 +4,6 @@ int bluePin = 11;
 
 int isPouredPin = 2;
 int isPouringPin = 3;
-//int isBumpingPin = 4;
 
 const int init_frequency = 9600;
 
@@ -19,8 +18,8 @@ int stopShaking;
 void setup()
 {
   Serial.begin(init_frequency);
-  //setColor(0, 0, 0);
-  setColor(255, 0, 0);
+  setColor(0, 0, 0);
+  //setColor(255, 255, 255);
   data[0] = id;
   data[5] = '#';
   startCounting = 0;
@@ -49,6 +48,20 @@ void loop(){
     readData();
     printData();
   }
+  
+  /*
+  if(digitalRead(isPouredPin) == HIGH) {
+    setColor(25, 0, 0);
+  } else {
+    setColor(0, 0, 0);;
+  }
+  
+  if(digitalRead(isPouringPin) == HIGH) {
+    setColor(0, 25, 0);
+  } else {
+    setColor(0, 0, 0);;
+  }*/
+  
   delay(10);
 }
 

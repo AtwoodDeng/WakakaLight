@@ -2,11 +2,12 @@ int redPin = 9;
 int greenPin = 10;
 int bluePin = 11;
 
-int isPouringPin = 2;
+int isPouringPin = 5;
+int colorRedPin = 2;
 int colorGreenPin = 3;
 int colorBluePin = 4;
 
-const int init_frequency = 9600;
+const int init_frequency = 9600;z
 
 byte id = 0;
 byte colorID; //1, green; 2, blue
@@ -52,9 +53,11 @@ void readData() {
 
 void printData() {
   if(digitalRead(colorGreenPin) == LOW) {
-    colorID = colorGreenPin - 2;
+    colorID = colorGreenPin - 1;
   } else if(digitalRead(colorBluePin) == LOW) {
-    colorID = colorBluePin - 2;
+    colorID = colorBluePin - 1;
+  } else if(digitalRead(colorRedPin) == LOW) {
+    colorID = colorRedPin - 1;
   } else {
     colorID = 0;
   }
