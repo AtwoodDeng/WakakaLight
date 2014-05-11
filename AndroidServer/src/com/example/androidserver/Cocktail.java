@@ -75,10 +75,6 @@ public class Cocktail {
 				int color_g=0;
 				int color_b=0;
 				
-//				r[0]=r[1]=r[2] = (byte)255;
-//				g[0]=g[1]=g[2] = (byte)255;
-//				b[0]=b[1]=b[2] = (byte)0;
-				
 				for( int i = 0 ; i < layNum ; ++ i )
 				{
 					color_r += (int) r[i] & 0xFF ;

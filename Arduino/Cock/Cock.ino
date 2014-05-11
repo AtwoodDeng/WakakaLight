@@ -6,6 +6,7 @@ int isPouringPin = 5;
 int colorRedPin = 2;
 int colorGreenPin = 3;
 int colorBluePin = 4;
+int colorRedPin = 5;
 
 const int init_frequency = 9600;z
 
