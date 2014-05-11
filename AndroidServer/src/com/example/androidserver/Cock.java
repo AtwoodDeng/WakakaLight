@@ -27,7 +27,9 @@ public class Cock {
 			return;
 		if ( in[3] != '#' )
 			return;
-		colorID = in[1];
+		if(in[1] != 0)
+			colorID = in[1];
+		
 		isPouring = in[2];
 		
 	}
@@ -36,10 +38,13 @@ public class Cock {
 	{
 		switch (colorID) {
 		case 1:
-			setColor(0, 255, 0);
+			setColor(100, 0, 20);
 			break;
 		case 2:
-			setColor(0, 0, 255);
+			setColor(100, 20, 0);
+			break;
+		case 3:
+			setColor(20, 0, 100);
 			break;
 		default:
 			setColor(0, 0, 0);
