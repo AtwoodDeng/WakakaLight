@@ -18,8 +18,8 @@ int stopShaking;
 void setup()
 {
   Serial.begin(init_frequency);
-  setColor(0, 0, 0);
-  //setColor(255, 255, 255);
+  //setColor(0, 0, 0);
+  setColor(255, 255, 255);
   data[0] = id;
   data[5] = '#';
   startCounting = 0;
